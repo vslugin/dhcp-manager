@@ -5,6 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 import * as Joi from 'joi';
 import { dataSourceOptions } from './db/data-source';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { HostsController } from './controllers/hosts.controller';
 
 @Module({
   imports: [
@@ -22,7 +23,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       autoLoadEntities: true,
     }),
   ],
-  controllers: [AppController],
+  controllers: [AppController, HostsController],
   providers: [AppService],
 })
 export class AppModule {}

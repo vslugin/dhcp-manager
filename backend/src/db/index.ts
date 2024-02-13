@@ -12,7 +12,7 @@ dataSource.initialize().then(async () => {
     user.mac_addr = "152"
     user.is_active = true
     user.room_id = "1"
-    await user.save()
+   // await user.save()
     console.log("Saved a new user with id: " + user.id)
 
     console.log("Loading users from the database...")

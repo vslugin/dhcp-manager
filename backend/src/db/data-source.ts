@@ -11,11 +11,12 @@ const configService = new ConfigService();
 const loggingSQL = !!safeJsonParse(configService.get('LOGGING_SQL'));
 export const dataSourceOptions: DataSourceOptions = {
   type: 'sqlite',
-  database: configService.get('DB_FILE', 'db.db'),
+  database: configService.get('DB_FILE', 'testdb.db'),
   entities: [__dirname + '/../**/*.entity.{js,ts}'],
   migrations: [__dirname + '/migrations/**/*.{js,ts}'],
   migrationsTableName: 'migrations_typeorm',
   logging: loggingSQL ? ['error', 'query'] : false,
+  synchronize: true,
   namingStrategy: new SnakeNamingStrategy(),
 };
 export default new DataSource(dataSourceOptions);

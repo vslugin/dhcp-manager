@@ -5,6 +5,7 @@
 ```bash
 cd backend \
 && npm ci \
+&& npm run migration:run \
 && npm run start:dev
 ```
 

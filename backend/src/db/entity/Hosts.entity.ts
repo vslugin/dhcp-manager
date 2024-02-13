@@ -16,10 +16,14 @@ export class Hosts extends BaseEntity{
     @Column()
     is_active: boolean
 
-    @Column()
+    @Column({
+        unique: true
+    })
     ip_addr: string
 
-    @Column()
+    @Column({
+        unique: true
+    })
     mac_addr: string
 
     @Column()

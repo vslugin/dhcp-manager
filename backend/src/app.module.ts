@@ -1,11 +1,14 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
+import { AppController } from './controllers/app.controller';
 import { AppService } from './app.service';
+import { config } from 'dotenv';
 import { ConfigModule } from '@nestjs/config';
 import * as Joi from 'joi';
 import { dataSourceOptions } from './db/data-source';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { HostsController } from './controllers/hosts.controller';
+
+config()
 
 @Module({
   imports: [

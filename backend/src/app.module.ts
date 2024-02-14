@@ -7,6 +7,7 @@ import * as Joi from 'joi';
 import { dataSourceOptions } from './db/data-source';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { HostsController } from './controllers/hosts.controller';
+import { GateController } from './controllers/gateways.controller';
 
 config()
 
@@ -26,7 +27,7 @@ config()
       autoLoadEntities: true,
     }),
   ],
-  controllers: [AppController, HostsController],
+  controllers: [AppController, HostsController, GateController],
   providers: [AppService],
 })
 export class AppModule {}

@@ -4,6 +4,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import initDb from './db';
 import type {NestExpressApplication} from '@nestjs/platform-express'
+import config_generator from './utils/config_generator';
 
 
 async function bootstrap() {
@@ -26,6 +27,7 @@ async function bootstrap() {
   initDb()
   await app.listen(PORT, '0.0.0.0');
   const url = await app.getUrl();
+  config_generator()
   console.log(`server started at ${url}`);
 }
 bootstrap();

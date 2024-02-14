@@ -22,6 +22,7 @@ lerna-debug.log*
 /.idea
 .project
 .classpath
+.prettierrc
 .c9/
 *.launch
 .settings/
@@ -36,3 +37,5 @@ lerna-debug.log*
 
 .env
 db.db
+testdb.db
+*.txt

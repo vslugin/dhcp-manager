@@ -1,10 +1,7 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import * as Joi from 'joi';
-import { dataSourceOptions } from './db/data-source';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { GatewaysModule } from './gateways/gateways.module';
 
 @Module({
   imports: [
@@ -17,12 +14,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
           .default('dev'),
       }),
     }),
-    TypeOrmModule.forRoot({
-      ...dataSourceOptions,
-      autoLoadEntities: true,
-    }),
+    GatewaysModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}

@@ -1,5 +1,4 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
-import { IsString } from 'class-validator';
 
 @Entity()
 export class Gateway {
@@ -7,14 +6,11 @@ export class Gateway {
   id: string;
 
   @Column()
-  @IsString()
   name: string;
 
-  @Column()
-  @IsString()
+  @Column({ nullable: true })
   description: string;
 
   @Column()
-  @IsString()
-  ip_addr: number;
+  ip_addr: string;
 }

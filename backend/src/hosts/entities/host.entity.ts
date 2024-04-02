@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
-import { Gateway } from './gateway.entity';
-import { Room } from './rooms.entity';
+import { Gateway } from '../../gateways/entities/gateway.entity';
+import { Room } from '../../rooms/entities/room.entity';
 
 @Entity()
 export class Host {
@@ -10,7 +10,7 @@ export class Host {
   @Column()
   name: string;
 
-  @Column()
+  @Column({ nullable: true })
   description: string;
 
   @Column()
@@ -22,9 +22,9 @@ export class Host {
   @Column()
   mac_addr: string;
 
-  @ManyToOne(() => Gateway, (gateway) => gateway.id, { onDelete: 'SET NULL' })
+  @ManyToOne(() => Gateway, (gateway) => gateway.id)
   gateway: Gateway;
 
-  @ManyToOne(() => Room, (room) => room.id, { onDelete: 'SET NULL' })
+  @ManyToOne(() => Room, (room) => room.id)
   room: Room;
 }

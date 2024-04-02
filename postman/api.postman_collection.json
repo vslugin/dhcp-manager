@@ -88,14 +88,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{host}}/api/gateways/952b6be7-591d-499a-b326-30fb2dd9c593",
+							"raw": "{{host}}/api/gateways/{{id}}",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"api",
 								"gateways",
-								"952b6be7-591d-499a-b326-30fb2dd9c593"
+								"{{id}}"
 							]
 						}
 					},
@@ -114,6 +114,238 @@
 							"path": [
 								"api",
 								"gateways",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "rooms",
+			"item": [
+				{
+					"name": "Все",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/rooms",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"rooms"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Один по id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/rooms/{{id}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"rooms",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Создать",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Room1 1\",\r\n    \"description\": \"The room 1\",\r\n    \"is_active\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/rooms",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"rooms"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Изменить",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Room1 2\",\r\n    \"description\": \"\",\r\n    \"is_active\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/rooms/{{id}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"rooms",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Удалить по id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/rooms/{{id}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"rooms",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "hosts",
+			"item": [
+				{
+					"name": "Все",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/hosts",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"hosts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Один по id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/hosts/{{id}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"hosts",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Создать",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Room1 1\",\r\n    \"description\": \"The room 1\",\r\n    \"is_active\": false,\r\n    \"ip_addr\": \"qq\",\r\n    \"mac_addr\": \"ww\",\r\n    \"gateway_id\": \"cde1d9c9-7d8c-4c7c-973e-68b7e63b65c3\",\r\n    \"room_id\": \"baacaf8a-acd4-4619-9f66-5c140479247c\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/hosts",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"hosts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Изменить",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Host2 2\",\r\n    \"description\": \"Host 2\",\r\n    \"is_active\": true,\r\n    \"ip_addr\": \"qq2\",\r\n    \"mac_addr\": \"ww2\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/hosts/{{id}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"hosts",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Удалить по id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/hosts/{{id}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"hosts",
 								"{{id}}"
 							]
 						}

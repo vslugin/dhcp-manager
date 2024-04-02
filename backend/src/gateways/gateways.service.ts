@@ -1,16 +1,17 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { CreateGatewayDto } from './dto/create-gateway.dto';
+import { Injectable } from '@nestjs/common';
 import { UpdateGatewayDto } from './dto/update-gateway.dto';
 import { Repository } from 'typeorm';
-import { Gateway } from '../entities/gateway.entity';
+import { Gateway } from './entities/gateway.entity';
+import { CreateGatewayDto } from './dto/create-gateway.dto';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class GatewaysService {
   constructor(
-    @Inject('GATEWAY_REPO') private gatewayRepo: Repository<Gateway>,
+    @InjectRepository(Gateway) private gatewayRepo: Repository<Gateway>,
   ) {}
 
-  create(createGatewayDto: any) {
+  create(createGatewayDto: CreateGatewayDto) {
     return this.gatewayRepo.save(createGatewayDto);
   }
 
@@ -27,6 +28,6 @@ export class GatewaysService {
   }
 
   remove(id: string) {
-    return this.gatewayRepo.delete({ id: id });
+    return this.gatewayRepo.delete({ id });
   }
 }

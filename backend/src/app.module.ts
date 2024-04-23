@@ -6,8 +6,12 @@ import { RoomsModule } from './rooms/rooms.module';
 import { HostsModule } from './hosts/hosts.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
-import { config } from 'dotenv';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
+import { config } from 'dotenv';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGuard } from './auth/jwt-auth.guard';
 config();
 const configService = new ConfigService();
 
@@ -33,8 +37,16 @@ const configService = new ConfigService();
     GatewaysModule,
     RoomsModule,
     HostsModule,
+    AuthModule,
+    UsersModule,
   ],
   controllers: [],
   providers: [],
+  /*providers: [
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard, // <<--- // enable auth globally
+    },
+  ],*/
 })
 export class AppModule {}

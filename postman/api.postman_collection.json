@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "4db7f575-e37b-48f6-afd2-9b578dc9a5e2",
+		"_postman_id": "717c1510-98e3-42a6-9423-ca0646bf3bb2",
 		"name": "api",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "33942755"
+		"_exporter_id": "34481486"
 	},
 	"item": [
 		{
@@ -12,6 +12,16 @@
 				{
 					"name": "Все",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -49,6 +59,16 @@
 				{
 					"name": "Создать",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwic3ViIjoxLCJpYXQiOjE3MTM5MDUzMTcsImV4cCI6MTcxMzkwNTQzN30.gpizLXVW7SyUX-IGudiM_qxyvScouO0MRrj0e5aqBxs",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -115,6 +135,39 @@
 								"api",
 								"gateways",
 								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"admin\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/auth/login",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
 							]
 						}
 					},

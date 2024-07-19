@@ -1,0 +1,28 @@
+services:
+  rabbitmq:
+    container_name: rabbitmq
+    hostname: rabbitmq
+    image: rabbitmq:3-management
+    restart: always
+    ports:
+      - '5672:5672'  # Port for AMQP protocol
+      - '8672:15672' # Port for Web Interface
+    environment:
+      - RABBITMQ_DEFAULT_USER=ruser
+      - RABBITMQ_DEFAULT_PASS=rPass123
+  postgresql:
+    container_name: postgresql
+    hostname: postgresql
+    image: postgres:16
+    restart: always
+    environment:
+      - POSTGRES_USER=dhcpmanager
+      - POSTGRES_PASSWORD=dhcpmanagerPass123
+      - POSTGRES_DB=dhcpmanager
+    ports:
+      - '5434:5432'
+    volumes:
+      - data:/var/lib/postgresql/data
+
+volumes:
+  data:

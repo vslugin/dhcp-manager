@@ -1,6 +1,6 @@
 #!/bin/bash
 npm ci
-cp .env_example .env
+#cp .env_example .env
 #npm install yarn
 #systemctl stop backend
 npm run build

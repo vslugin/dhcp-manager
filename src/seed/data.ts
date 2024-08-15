@@ -1,7 +1,7 @@
 export default {
     users: [
         {
-            email: 'admin@admim.admin',
+            email: 'admin@admin.admin',
             password: 'admin'
         }
     ]

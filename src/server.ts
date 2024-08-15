@@ -18,13 +18,13 @@ const start = async () => {
     onInit: async () => {
       payload.logger.info(`Payload Admin URL: ${payload.getAdminURL()}`)
 
-     const {users} = data;
-      for (const user of users) {
-        await payload.create({
-          collection: 'users',
-          data: user,
-        });
-      }
+    //  const {users} = data;
+    //   for (const user of users) {
+    //     await payload.create({
+    //       collection: 'users',
+    //       data: user,
+    //     });
+    //   }
 
     },
   })

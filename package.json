@@ -1,10 +1,12 @@
 {
-  "name": "PayloadCMS_Test",
+  "name": "dhcp-manager",
   "description": "A blank template to get started with Payload",
   "version": "1.0.0",
   "main": "dist/server.js",
   "license": "MIT",
   "scripts": {
+    "seed": "cross-env PAYLOAD_CONFIG_PATH=src/payload.config.ts ts-node src/seedDatabase.ts",
+    "seedEXCEL": "cross-env PAYLOAD_CONFIG_PATH=src/payload.config.ts ts-node src/seedFromEXCEL.ts",
     "dev": "cross-env PAYLOAD_CONFIG_PATH=src/payload.config.ts nodemon",
     "build:payload": "cross-env PAYLOAD_CONFIG_PATH=src/payload.config.ts payload build",
     "build:server": "tsc",
@@ -26,6 +28,7 @@
     "dotenv": "^8.2.0",
     "express": "^4.19.2",
     "payload": "^2.0.0",
+    "xlsx": "^0.18.5",
     "yarn": "^1.22.22"
   },
   "devDependencies": {

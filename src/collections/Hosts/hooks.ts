@@ -12,7 +12,7 @@ export const checkHostName: FieldHook = async ({ value, req, originalDoc }) => {
     }
 
     const isEditing = originalDoc;
-    const isDuplicating = req.body.id;
+    const isDuplicating = req.body?.id;
 
     if(isDuplicating) {
 
@@ -68,7 +68,7 @@ export const checkMacAddress: FieldHook = async ({ value, req, originalDoc }) =>
     }
 
     const isEditing = originalDoc;
-    const isDuplicating = req.body.id;
+    const isDuplicating = req.body?.id;
 
     if(isDuplicating) {
 
@@ -123,7 +123,7 @@ export const checkIpAddress: FieldHook = async ({ value, req, originalDoc }) => 
     }
 
     const isEditing = originalDoc;
-    const isDuplicating = req.body.id;
+    const isDuplicating = req.body?.id;
 
     if(isDuplicating) {
 

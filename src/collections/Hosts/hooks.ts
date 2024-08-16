@@ -1,14 +1,14 @@
 import {FieldHook} from "payload/types";
 
 const isValidHostName = (input) => {
-    const regEx = /^[a-z0-9_]{2,16}$/;
+    const regEx = /^[a-z0-9_]{2,25}$/;
     return regEx.test(input);
 };
 
 export const checkHostName: FieldHook = async ({ value, req, originalDoc }) => {
 
     if (!isValidHostName(value)) {
-        throw new Error('В имени хоста допустимы только буквы (a-z) в нижнем регистре цифры и знак "_". Допустимая длина от 2 до 16 символов');
+        throw new Error('В имени хоста допустимы только буквы (a-z) в нижнем регистре цифры и знак "_". Допустимая длина от 2 до 20 символов');
     }
 
     const isEditing = originalDoc;

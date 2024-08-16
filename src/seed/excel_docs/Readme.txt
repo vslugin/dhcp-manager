@@ -1,0 +1,1 @@
+Put here file schema.xlsx and see code in ../../seedFromEXCEL.ts

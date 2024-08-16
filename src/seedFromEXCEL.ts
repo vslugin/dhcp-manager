@@ -7,6 +7,7 @@ require('dotenv').config();
 const app = express();
 
 const netMaskValue = '21';
+const excelFilename = 'schema.xlsx';
 
 (async () => {
     // Initialize Payload
@@ -15,9 +16,7 @@ const netMaskValue = '21';
         express: app,
         onInit: async () => {
 
-            const filePath = path.join(__dirname, 'seed', 'excel_docs', 'nntc_schema.xlsx');
-
-            const sheetsWhiteList = ['lab-rc-158', 'lab-453'];
+            const filePath = path.join(__dirname, 'seed', 'excel_docs', excelFilename);
 
             console.log(`Парсится файл: '${filePath}'...`);
 
@@ -25,11 +24,7 @@ const netMaskValue = '21';
 
             const sheets = workbook.SheetNames;
 
-            //for (const sheet of sheets as any) {
-            for (const sheet of sheetsWhiteList as any) {
-
-                // console.log('sheet', sheet);
-
+            for (const sheet of sheets as any) {
                 // создаём кабинеты
                 const roomName = sheet;
 
@@ -76,7 +71,7 @@ const netMaskValue = '21';
                     const rowsWithHeaders = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
                     const rows = XLSX.utils.sheet_to_json(worksheet, { header: 0 });
 
-                    const isMainGateway = rowsWithHeaders[0][4].trim().toLowerCase() === 'yes';
+                    const isMainGateway = rowsWithHeaders[0][4] && rowsWithHeaders[0][4].trim().toLowerCase() === 'yes';
                     const gatewayName = isMainGateway ? 'main' : 'reserve';
 
                     const gateway: any = gateways.find((each: any) => each.name === gatewayName);
@@ -85,15 +80,15 @@ const netMaskValue = '21';
 
                         const values = Object.values(row);
 
-                        const name = values[0];
-                        const ipAddress = values[1];
-                        const macAddress = values[2].toLowerCase();
-                        let description = values[5].trim();
+                        const name = values[0] ? (values[0] as string).trim().toLowerCase() : '';
+                        const ipAddress = values[2] ? (values[1] as string).trim() : '';
+                        const macAddress = values[2] ? (values[2] as string).trim().toLowerCase() : '';
+                        let description = values[5] ? (values[5] as string).trim().toLowerCase() : '';
 
                         if (
-                            description.trim().toLowerCase().startWith('если') ||
-                            description.trim().toLowerCase().startWith('yes') ||
-                            description.trim().toLowerCase().startWith('no')) {
+                            description.startsWith('если') ||
+                            description.startsWith('yes') ||
+                            description.startsWith('no')) {
                             description = '';
                         }
 
@@ -139,11 +134,7 @@ const netMaskValue = '21';
                         } else {
                             console.log(`Подозрительный хост!`, data);
                         }
-
-                        break;
                     }
-
-
 
                 } catch (e) {
                     console.log(`Ошибка записи кабинета в базу`, e, sheet, data);

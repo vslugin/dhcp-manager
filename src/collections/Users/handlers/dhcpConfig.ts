@@ -1,4 +1,5 @@
 import { sql } from 'drizzle-orm';
+import { Exporter } from '../utils/exporter';
 
 export const dhcpConfigHandler = async (req, res, next) => {
 
@@ -16,12 +17,14 @@ export const dhcpConfigHandler = async (req, res, next) => {
         const hosts = await req.payload.find({
             collection: 'hosts'
         });
-
+        const dhcpConfig = await Exporter.exportDHCPConfig(req.payload)
         // вот тут надо отдавать данные в формате plaintext (Content-Type надо поменять)
         // данные -- конфиг для dhcpd-server. Формат конфига смотри в прошлом коде, где из excel он сотворяется
-        res.status(200).send({rooms, hosts});
+        res.setHeader('content-type', 'text/plain');
+        res.status(200).send(dhcpConfig);
 
     } catch (err: any) {
+        console.log(err)
         res.status(500).send({ error: err });
     }
 }

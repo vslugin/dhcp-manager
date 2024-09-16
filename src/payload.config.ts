@@ -14,8 +14,16 @@ export default buildConfig({
         disable: false,
         user: Users.slug,
         bundler: webpackBundler(),
+        dateFormat: 'dd.MM.yyyy HH:mm',
+        meta: {
+            titleSuffix: 'DHCP Manager'
+        },
     },
     editor: slateEditor({}),
+    i18n: {
+        fallbackLng: 'ru',
+        supportedLngs: ['ru', 'en'],
+    },
     collections: [Gateways, Rooms, Hosts, Users],
     typescript: {
         outputFile: path.resolve(__dirname, 'payload-types.ts'),

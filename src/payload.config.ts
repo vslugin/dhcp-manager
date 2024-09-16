@@ -7,6 +7,8 @@ import {Users} from './collections/Users'
 import {Rooms} from "./collections/Rooms";
 import {Gateways} from "./collections/Gateways";
 import {Hosts} from "./collections/Hosts";
+import {Settings} from "./collections/Settings";
+import {DnsServers} from "./collections/DnsServers";
 
 export default buildConfig({
     debug: true,
@@ -24,7 +26,7 @@ export default buildConfig({
         fallbackLng: 'ru',
         supportedLngs: ['ru', 'en'],
     },
-    collections: [Gateways, Rooms, Hosts, Users],
+    collections: [Gateways, DnsServers, Rooms, Hosts, Users, Settings],
     typescript: {
         outputFile: path.resolve(__dirname, 'payload-types.ts'),
     },

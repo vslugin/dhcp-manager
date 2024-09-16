@@ -30,6 +30,15 @@ const app = express();
         });
       }
 
+      // settings
+      const { settings } = data;
+      for (const sett of settings) {
+        await payload.create({
+          collection: 'settings',
+          data: sett,
+        });
+      }
+
       console.log('SEED IS DONE.');
       process.exit(0);
     },

@@ -63,14 +63,12 @@ const isValidMacAddress = (input) => {
 
 export const checkMacAddress: FieldHook = async ({ value, req, originalDoc }) => {
 
+    if (!isValidMacAddress(value)) {
+        throw new Error('Введите корректный MAC-адрес в формате XX:XX:XX:XX:XX:XX, где X принимает шестрадцатиричное значение от 1 до F');
+    }
+
     const isEditing = originalDoc;
     const isDuplicating = req.body?.id;
-
-    if(!(isEditing || isDuplicating)) {
-        if (!isValidMacAddress(value)) {
-            throw new Error('Введите корректный MAC-адрес в формате XX:XX:XX:XX:XX:XX, где X принимает шестрадцатиричное значение от 1 до F');
-        }
-    }
 
     if(isDuplicating) {
 
@@ -120,14 +118,12 @@ const isValidIpAddress = (input) => {
 };
 export const checkIpAddress: FieldHook = async ({ value, req, originalDoc }) => {
 
+    if (!isValidIpAddress(value)) {
+        throw new Error('Введённое значение не похоже на IP-адрес');
+    }
+
     const isEditing = originalDoc;
     const isDuplicating = req.body?.id;
-
-    if(!(isEditing || isDuplicating)){
-        if (!isValidIpAddress(value)) {
-            throw new Error('Введённое значение не похоже на IP-адрес');
-        }
-    }
 
     if(isDuplicating) {
 

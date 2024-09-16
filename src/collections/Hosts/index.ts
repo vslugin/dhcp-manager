@@ -93,6 +93,17 @@ export const Hosts: CollectionConfig = {
         },
         {
             label: {
+                en: 'DNS Server',
+                ru: 'Адрес DNS сервера'
+            },
+            name: "dnsServer",
+            type: "relationship",
+            relationTo: 'dns-servers',
+            hasMany: true,
+            required: true
+        },
+        {
+            label: {
                 en: 'Room',
                 ru: 'Кабинет'
             },

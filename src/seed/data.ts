@@ -15,34 +15,40 @@ export default {
             ipAddress: '192.168.1.254'
         }
     ],
+    dnsServers: [
+        {
+            name: 'default',
+            ipAddress: '8.8.8.8'
+        }
+    ],
     settings: [
         {
-            name: 'DHCP сервер: сеть',
+            name: 'Подсеть DHCP сервера',
             key: 'DHCP_NET_SUBNET',
             value: '192.168.1.0'
         },
         {
-            name: 'DHCP сервер: маска подсети',
+            name: 'Маска подсети DHCP сервера',
             key: 'DHCP_NET_MASK',
             value: '255.255.255.0'
         },
         {
-            name: 'DHCP сервер: шлюз по умолчанию',
+            name: 'Шлюз по умолчанию, выдаваемый DHCP сервером',
             key: 'DHCP_NET_GW',
             value: '192.168.1.1'
         },
         {
-            name: 'DHCP сервер: DNS сервер по умолчанию',
+            name: 'DNS сервер по умолчанию, выдаваемый DHCP сервером',
             key: 'DHCP_NET_GW',
             value: '192.168.1.1'
         },
         {
-            name: 'DHCP сервер: адрес PXE сервера',
+            name: 'Адрес PXE сервера',
             key: 'DHCP_NET_PXEADDR',
             value: '192.168.1.2'
         },
         {
-            name: 'DHCP сервер: файл на PXE сервере',
+            name: 'Файл на PXE сервере',
             key: 'DHCP_NET_PXEFILE',
             value: 'pxelinux.0'
         }

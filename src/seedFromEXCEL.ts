@@ -28,9 +28,21 @@ const excelFilename = 'schema.xlsx';
                 // создаём кабинеты
                 const roomName = sheet;
 
-                // 
+                const gatewaysEntities = await payload.find({
+                    collection: 'gateways'
+                });
+                const gateways = gatewaysEntities.docs;
+
+                const dnsServerEntities = await payload.find({
+                    collection: 'dns-servers'
+                });
+                const dnsServers = dnsServerEntities.docs;
+
+                //
                 const data = {
                     name: roomName,
+                    gateway: gateways[0].id,
+                    dnsServer: dnsServers[0].id
                 };
 
                 try {
@@ -44,7 +56,7 @@ const excelFilename = 'schema.xlsx';
                         },
                     });
 
-                    const isExist = existEntity.totalDocs > 0;
+                    const isExist = existEntity?.totalDocs > 0;
                     let roomId = null;
 
                     if (isExist) {
@@ -59,11 +71,6 @@ const excelFilename = 'schema.xlsx';
                         roomId = createdRoom.id;
                     }
 
-                    const gatewaysEntities = await payload.find({
-                        collection: 'gateways'
-                    });
-                    const gateways = gatewaysEntities.docs;
-
                     // Заполняем кабинет компами
                     const worksheet = workbook.Sheets[sheet];
 
@@ -75,6 +82,14 @@ const excelFilename = 'schema.xlsx';
                     const gatewayName = isMainGateway ? 'main' : 'reserve';
 
                     const gateway: any = gateways.find((each: any) => each.name === gatewayName);
+
+                    await payload.update({
+                        collection: 'rooms',
+                        id: roomId,
+                        data: {
+                            gateway: gateway.id
+                        }
+                    });
 
                     for (const row of rows) {
 
@@ -96,9 +111,8 @@ const excelFilename = 'schema.xlsx';
                             name,
                             description,
                             ipAddress,
-                            macAddress,
                             netMask: netMaskValue,
-                            gateway: gateway.id,
+                            macAddress,
                             room: roomId
                         };
 

@@ -44,6 +44,28 @@ export const Rooms: CollectionConfig = {
         },
         {
             label: {
+                en: 'Gateway',
+                ru: 'Основной шлюз'
+            },
+            name: "gateway",
+            type: "relationship",
+            relationTo: 'gateways',
+            hasMany: false,
+            required: true
+        },
+        {
+            label: {
+                en: 'DNS Server',
+                ru: 'Адрес DNS сервера'
+            },
+            name: "dnsServer",
+            type: "relationship",
+            relationTo: 'dns-servers',
+            hasMany: true,
+            required: true
+        },
+        {
+            label: {
                 en: 'Enabled',
                 ru: 'Включён'
             },

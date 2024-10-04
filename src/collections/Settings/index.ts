@@ -27,7 +27,10 @@ export const Settings: CollectionConfig = {
             },
             name: "name",
             type: "text",
-            required: true
+            required: true,
+            admin: {
+                readOnly: true
+            }
         },
         {
             label: {
@@ -36,7 +39,10 @@ export const Settings: CollectionConfig = {
             },
             name: "key",
             type: "text",
-            required: true
+            required: true,
+            admin: {
+                readOnly: true
+            }
         },
         {
             label: {

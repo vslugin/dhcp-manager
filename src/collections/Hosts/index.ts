@@ -72,38 +72,6 @@ export const Hosts: CollectionConfig = {
         },
         {
             label: {
-                en: 'Is Wi-Fi Adapter',
-                ru: 'Это Wi-Fi Адаптер'
-            },
-            name: "isWifiAdapter",
-            type: "checkbox",
-            required: true,
-            defaultValue: false
-        },
-        {
-            label: {
-                en: 'Gateway',
-                ru: 'Основной шлюз'
-            },
-            name: "gateway",
-            type: "relationship",
-            relationTo: 'gateways',
-            hasMany: false,
-            required: true
-        },
-        {
-            label: {
-                en: 'DNS Server',
-                ru: 'Адрес DNS сервера'
-            },
-            name: "dnsServer",
-            type: "relationship",
-            relationTo: 'dns-servers',
-            hasMany: true,
-            required: true
-        },
-        {
-            label: {
                 en: 'Room',
                 ru: 'Кабинет'
             },

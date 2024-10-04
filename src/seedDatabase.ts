@@ -30,6 +30,15 @@ const app = express();
         });
       }
 
+      // dns-servers
+      const { dnsServers } = data;
+      for (const ds of dnsServers) {
+        await payload.create({
+          collection: 'dns-servers',
+          data: ds,
+        });
+      }
+
       // settings
       const { settings } = data;
       for (const sett of settings) {

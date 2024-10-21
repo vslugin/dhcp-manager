@@ -1,64 +1,73 @@
-import {sql} from 'drizzle-orm';
-
 const EOL: string = "\n";
 const EOLx2: string = EOL.repeat(2);
 
 export class Exporter {
 
-    private static dns = "95.167.167.95, 95.167.167.96"; // FIXME: доставать адреса из таблицы настроек;
-
     public static async exportDHCPConfig(payload: any): Promise<string> {
         const groupsArr: any[] = [];
-        const groups = await payload.db.drizzle.execute(sql.raw(`SELECT * FROM rooms`));
-        const hosts = await payload.db.drizzle.execute(
-            sql.raw(`
-                        SELECT hr.parent_id, hr.gateways_id, s.rooms_id,
-                                s.name, s.room_enabled,
-                                g.ip_address as gw_ip,
-                                g.is_enabled as gw_enabled,
-                                h.ip_address,
-                                h.mac_address, h.is_wifi_adapter,
-                                h.is_enabled, h.net_mask,
-                                h."name"
-                                FROM public.hosts_rels hr
-                                INNER JOIN (
-                                    SELECT parent_id, rooms_id,
-                                            rooms.is_enabled as room_enabled,
-                                            rooms.name from hosts_rels 
-                                                INNER JOIN rooms ON rooms.id = hosts_rels.rooms_id 
-                                                    WHERE path = 'room'
-                                    ) s ON s.parent_id = hr.parent_id 
-                                INNER JOIN gateways g ON g.id = hr.gateways_id
-                                INNER JOIN hosts h ON h.id = hr.parent_id
-                                WHERE hr."path" = 'gateway'
-                        `
-            )
-        );
-
-        for (const group of groups.rows) {
-            const hostsWithSameGroup = hosts.rows.filter((host: any) => host.rooms_id === group.id);
-
+        const totalrooms = await payload.count({
+            collection: 'rooms'
+        })
+        const totalhosts = await payload.count({
+            collection: 'hosts'
+        })
+        const groups = await payload.find({
+            collection: 'rooms',
+            limit: totalrooms.totalDocs
+        })
+        const hosts = await payload.find({
+            collection: 'hosts',
+            limit: totalhosts.totalDocs
+        })
+        const options = await payload.find({
+            collection: 'settings',
+            limit: totalhosts.totalDocs
+        })
+        //return options
+        for (const group of groups.docs) {
+            const hostsWithSameGroup = hosts.docs.filter((host: any) => host.room.id === group.id);
+            console.log(hostsWithSameGroup.length)
             const hostsForDhcp = [];
             if (hostsWithSameGroup.length) {
-                let gwIp = hostsWithSameGroup[0].gw_ip;
-                if (!hostsWithSameGroup[0].gw_enabled) {
+                let gwIp = group.gateway.ip_address;
+                if (!group.gateway.isEnabled) {
                     gwIp = ""
                 }
-                if (hostsWithSameGroup[0].room_enabled) {
+                if (group.isEnabled) {
+                    console.log("Building hosts for " + group.name)
                     hostsWithSameGroup.forEach((host: any) => {
-                        if (host.is_enabled) {
-                            hostsForDhcp.push(this.getHost(host.name, host.mac_address, host.ip_address));
+                        if (host.isEnabled) {
+                            hostsForDhcp.push(this.getHost(host.name, host.macAddress, host.ipAddress));
                         }
                     });
                 }
-                groupsArr.push(this.getGroup(gwIp, this.dns, hostsForDhcp.join(EOLx2), group.name));
+                var group_dns = ""
+                group.dnsServer.forEach(dns => {
+                    group_dns += `${dns.ipAddress} `
+                });
+                groupsArr.push(this.getGroup(gwIp, 
+                group_dns, 
+                hostsForDhcp.join(EOLx2), 
+                group.name,    
+                options.docs[2].value,
+                options.docs[3].value, ));
             }
         }
         //return groupsArr
-        return Exporter.getConfig(groupsArr.join(EOLx2));
+
+        return Exporter.getConfig(groupsArr.join(EOLx2), 
+        options.docs[4].value, //dns
+        options.docs[5].value, //gw
+        options.docs[6].value, //netmask
+        options.docs[7].value, //subnet
+        options.docs[2].value, //pxe filename
+        options.docs[3].value, // pxe ip
+        options.docs[1].value, //range begin
+        options.docs[0].value, // range end
+    );
     }
 
-    private static getConfig(groups: string): string {
+    private static getConfig(groups: string, dns: string, gw: string, net_mask: string, subnet: string, pxe_filename: string, pxe_ip: string, begin_range: string, end_range: string): string {
         // отступ у текста с 60 строки влияют на отображение файла в plaintext! Не нужно их делать!
         return `# DHCP server is authoritative for all networks
 authoritative;
@@ -86,19 +95,17 @@ max-lease-time 7200;
 
 shared-network espd {
 
-    subnet 10.207.144.0 netmask 255.255.248.0 {
+    subnet ${subnet} netmask ${net_mask} {
     
-      option routers 10.207.144.1;                              # default gateway
-      #option routers 10.207.151.253;                             # default gateway
-      option domain-name-servers 95.167.167.95, 95.167.167.96;  # dns nameservers
-      #option domain-name-servers 10.207.151.252;  # dns nameservers
+      option routers ${gw};                              # default gateway
+      option domain-name-servers ${dns};  # dns nameservers
       default-lease-time 1800;
       max-lease-time 7200;
       
       pool {
-        next-server 10.207.151.254;
-        filename    "pxelinux.0";
-        range 10.207.146.0 10.207.146.254;
+        next-server ${pxe_ip};
+        filename    "${pxe_filename}";
+        range ${begin_range} ${end_range};
       }
     
     }
@@ -107,7 +114,7 @@ shared-network espd {
 }`;
     }
 
-    private static getGroup(gw: string, dns: string, hosts: string, comment: string = ''): string {
+    private static getGroup(gw: string, dns: string, hosts: string, comment: string = '', pxe_filename: string, pxe_ip: string): string {
         const res: string[] = [''];
 
         res.push(`    #${comment}`);
@@ -119,8 +126,8 @@ shared-network espd {
     default-lease-time 1800;
     max-lease-time 7200;
       group {
-        next-server 10.207.151.254;
-        filename    "pxelinux.0";
+        next-server ${pxe_ip};
+        filename    "${pxe_filename}";
         
         # HOSTS BY MAC-ADDRESSES
         ${hosts}
@@ -135,8 +142,8 @@ shared-network espd {
     default-lease-time 1800;
     max-lease-time 7200;
       group {
-        next-server 10.207.151.254;
-        filename    "pxelinux.0";
+        next-server ${pxe_ip};
+        filename    "${pxe_filename}";
         
         # HOSTS BY MAC-ADDRESSES
 ${hosts}

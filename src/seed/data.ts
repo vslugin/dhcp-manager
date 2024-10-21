@@ -51,6 +51,16 @@ export default {
             name: 'Файл на PXE сервере',
             key: 'DHCP_NET_PXEFILE',
             value: 'pxelinux.0'
+        },
+        {
+            name: 'Начало диапазона выдаваемый адресов',
+            key: 'DHCP_IP_RANGE_BEGIN',
+            value: '192.168.1.2'
+        },
+        {
+            name: 'Конец диапазона выдаваемый адресов',
+            key: 'DHCP_IP_RANGE_END',
+            value: '192.168.1.254'
         }
     ]
 };

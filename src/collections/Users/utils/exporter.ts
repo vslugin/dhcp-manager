@@ -5,12 +5,17 @@ export class Exporter {
 
     public static async exportDHCPConfig(payload: any): Promise<string> {
         const groupsArr: any[] = [];
+
         const totalrooms = await payload.count({
             collection: 'rooms'
+        })
+        const totalopts= await payload.count({
+            collection: 'settings'
         })
         const totalhosts = await payload.count({
             collection: 'hosts'
         })
+        
         const groups = await payload.find({
             collection: 'rooms',
             limit: totalrooms.totalDocs
@@ -21,8 +26,9 @@ export class Exporter {
         })
         const options = await payload.find({
             collection: 'settings',
-            limit: totalhosts.totalDocs
+            limit: totalopts.totalDocs
         })
+        
         //return options
         for (const group of groups.docs) {
             const hostsWithSameGroup = hosts.docs.filter((host: any) => host.room.id === group.id);
@@ -54,7 +60,6 @@ export class Exporter {
             }
         }
         //return groupsArr
-
         return Exporter.getConfig(groupsArr.join(EOLx2), 
         options.docs[4].value, //dns
         options.docs[5].value, //gw

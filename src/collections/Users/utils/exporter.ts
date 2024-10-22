@@ -1,6 +1,6 @@
 const EOL: string = "\n";
 const EOLx2: string = EOL.repeat(2);
-
+import * as XLSX from "xlsx"
 export class Exporter {
 
     public static async exportDHCPConfig(payload: any): Promise<string> {
@@ -15,7 +15,7 @@ export class Exporter {
         const totalhosts = await payload.count({
             collection: 'hosts'
         })
-        
+
         const groups = await payload.find({
             collection: 'rooms',
             limit: totalrooms.totalDocs
@@ -71,6 +71,63 @@ export class Exporter {
         options.docs[0].value, // range end
     );
     }
+
+    public static async exportToXLSX(payload: any): Promise<string> {
+        const totalrooms = await payload.count({
+            collection: 'rooms'
+        })
+        const totalopts= await payload.count({
+            collection: 'settings'
+        })
+        const totalhosts = await payload.count({
+            collection: 'hosts'
+        })
+        
+        const groups = await payload.find({
+            collection: 'rooms',
+            limit: totalrooms.totalDocs
+        })
+        const hosts = await payload.find({
+            collection: 'hosts',
+            limit: totalhosts.totalDocs
+        })
+        const options = await payload.find({
+            collection: 'settings',
+            limit: totalopts.totalDocs
+        })
+        var wb = XLSX.utils.book_new();
+        //return options
+        for (const group of groups.docs) {
+            const hostsWithSameGroup = hosts.docs.filter((host: any) => host.room.id === group.id);
+            console.log(hostsWithSameGroup.length)
+            if (hostsWithSameGroup.length) {
+                var aoa_ws = []
+                let gwIp = group.gateway.ip_address;
+                if (!group.gateway.isEnabled) {
+                    gwIp = ""
+                }
+                var isEnabled = "no"
+                if(!group.isEnabled) {
+                    isEnabled = "no"
+                } else {
+                    isEnabled = "yes"
+                }
+                console.log("Building hosts for " + group.name)
+                hostsWithSameGroup.forEach((host: any) => {
+                    if (host.isEnabled) {
+                        isEnabled = "yes"
+                    } else {
+                        isEnabled = "no"
+                    }
+                    aoa_ws.push([host.name, host.macAddress, host.ipAddress, isEnabled])
+                });
+                XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(aoa_ws), group.name)
+            }
+        }
+        XLSX.writeFileXLSX(wb, __dirname + "/generated.xlsx")
+        return __dirname + "/generated.xlsx"
+    }
+
 
     private static getConfig(groups: string, dns: string, gw: string, net_mask: string, subnet: string, pxe_filename: string, pxe_ip: string, begin_range: string, end_range: string): string {
         // отступ у текста с 60 строки влияют на отображение файла в plaintext! Не нужно их делать!

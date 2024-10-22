@@ -102,19 +102,15 @@ export class Exporter {
             console.log(hostsWithSameGroup.length)
             if (hostsWithSameGroup.length) {
                 var aoa_ws = []
-                let gwIp = group.gateway.ip_address;
-                if (!group.gateway.isEnabled) {
-                    gwIp = ""
-                }
                 var isEnabled = "no"
-                if(!group.isEnabled) {
-                    isEnabled = "no"
-                } else {
+                if(group.isEnabled) {
                     isEnabled = "yes"
+                } else {
+                    isEnabled = "no"
                 }
                 console.log("Building hosts for " + group.name)
                 hostsWithSameGroup.forEach((host: any) => {
-                    if (host.isEnabled) {
+                    if (host.isEnabled && group.isEnabled) {
                         isEnabled = "yes"
                     } else {
                         isEnabled = "no"

@@ -1,5 +1,6 @@
 import {Exporter} from '../utils/exporter';
-require('dotenv').config();
+import dotenv from 'dotenv';
+dotenv.config();
 
 export const dhcpConfigHandler = async (req: any, res: any, next: any): Promise<void> => {
 

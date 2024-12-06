@@ -1,7 +1,8 @@
 import express from 'express';
 import payload from 'payload';
 import data from './seed/data';
-require('dotenv').config();
+import dotenv from 'dotenv';
+dotenv.config();
 
 const app = express();
 

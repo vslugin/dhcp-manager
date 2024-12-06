@@ -6,7 +6,18 @@ require('dotenv').config();
 
 const app = express();
 
-const netMaskValue = '21';
+const ipsMap = {
+  '144':'192',
+  '145':'193',
+  '146':'194',
+  '147':'195',
+  '148':'196',
+  '149':'197',
+  '150':'198',
+  '151':'199'
+};
+
+const netMaskValue = '20';
 const excelFilename = 'schema.xlsx';
 
 (async () => {
@@ -95,7 +106,7 @@ const excelFilename = 'schema.xlsx';
 
                         const values = Object.values(row);
 
-                        const name = values[0] ? (values[0] as string).trim().toLowerCase() : '';
+                        const name = values[0] ? (values[0] as string).trim().toLowerCase().replaceAll('-','_') : '';
                         const ipAddress = values[2] ? (values[1] as string).trim() : '';
                         const macAddress = values[2] ? (values[2] as string).trim().toLowerCase() : '';
                         let description = values[5] ? (values[5] as string).trim().toLowerCase() : '';
@@ -107,16 +118,19 @@ const excelFilename = 'schema.xlsx';
                             description = '';
                         }
 
+                        const ipAddressParts = ipAddress.split('.');
+                        const ipAddressMapped = `${ipAddressParts[0]}.${ipAddressParts[1]}.${ipsMap[ipAddressParts[2]]}.${ipAddressParts[3]}`;
+
                         const data = {
                             name,
                             description,
-                            ipAddress,
+                            ipAddress: ipAddressMapped,
                             netMask: netMaskValue,
                             macAddress,
                             room: roomId
                         };
 
-                        if (data.name && data.ipAddress && data.macAddress) {
+                        if (data.name.length && data.ipAddress.length && data.macAddress.length === 17) {
                             // сохраняем хост
                             try {
 

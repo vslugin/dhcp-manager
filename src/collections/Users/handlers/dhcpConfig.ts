@@ -1,8 +1,9 @@
 import {Exporter} from '../utils/exporter';
+require('dotenv').config();
 
 export const dhcpConfigHandler = async (req: any, res: any, next: any): Promise<void> => {
 
-    const curlToken: string = 'fojeibae-jeo5owool7s-e0thaiweb-oo9quohhier'; // FIXME: достать токен из таблицы настроек;
+    const curlToken: string = process.env.CURL_TOKEN || 'secret';
     const isAccessViaCurlTokenValid = req.headers['external-curl-token'] && req.headers['external-curl-token'] === curlToken;
 
     if (!(isAccessViaCurlTokenValid || req.user)) {

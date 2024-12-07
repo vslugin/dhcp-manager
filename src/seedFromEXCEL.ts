@@ -108,7 +108,7 @@ const excelFilename = 'schema.xlsx';
 
                         const name = values[0] ? (values[0] as string).trim().toLowerCase().replaceAll('-','_') : '';
                         const ipAddress = values[2] ? (values[1] as string).trim() : '';
-                        const macAddress = values[2] ? (values[2] as string).trim().toLowerCase() : '';
+                        const macAddress = values[2] ? (values[2] as string).trim().toLowerCase().replaceAll('с', 'c').replaceAll('а', 'a') : '';
                         let description = values[5] ? (values[5] as string).trim().toLowerCase() : '';
 
                         if (
@@ -156,7 +156,7 @@ const excelFilename = 'schema.xlsx';
 
                             } catch (e) {
                                 console.log(`Ошибка записи хоста в базу`, e, row, data);
-                                process.exit(1);
+                               // process.exit(1);
                             }
 
                         } else {
@@ -166,7 +166,7 @@ const excelFilename = 'schema.xlsx';
 
                 } catch (e) {
                     console.log(`Ошибка записи кабинета в базу`, e, sheet, data);
-                    process.exit(1);
+                  //  process.exit(1);
                 }
 
             }

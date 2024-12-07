@@ -39,7 +39,7 @@ export default {
         },
         {
             name: 'DNS сервер по умолчанию, выдаваемый DHCP сервером',
-            key: 'DHCP_NET_GW',
+            key: 'DHCP_NET_DNS',
             value: '192.168.1.1'
         },
         {

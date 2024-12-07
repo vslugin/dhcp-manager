@@ -35,7 +35,7 @@ export class Exporter {
             console.log(hostsWithSameGroup.length)
             const hostsForDhcp = [];
             if (hostsWithSameGroup.length) {
-                let gwIp = group.gateway.ip_address;
+                let gwIp = group.gateway.ipAddress;
                 if (!group.gateway.isEnabled) {
                     gwIp = ""
                 }
@@ -183,13 +183,11 @@ shared-network espd {
     option domain-name-servers ${dns};
     default-lease-time 1800;
     max-lease-time 7200;
-      group {
         next-server ${pxe_ip};
         filename    "${pxe_filename}";
         
         # HOSTS BY MAC-ADDRESSES
         ${hosts}
-      }
     }`
             );
         } else {
@@ -199,13 +197,11 @@ shared-network espd {
     option domain-name-servers ${dns};
     default-lease-time 1800;
     max-lease-time 7200;
-      group {
         next-server ${pxe_ip};
         filename    "${pxe_filename}";
         
         # HOSTS BY MAC-ADDRESSES
 ${hosts}
-      }
     }`
             );
         }

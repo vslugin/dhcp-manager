@@ -9,9 +9,6 @@ export class Exporter {
         const totalrooms = await payload.count({
             collection: 'rooms'
         })
-        const totalopts= await payload.count({
-            collection: 'settings'
-        })
         const totalhosts = await payload.count({
             collection: 'hosts'
         })
@@ -24,15 +21,12 @@ export class Exporter {
             collection: 'hosts',
             limit: totalhosts.totalDocs
         })
-        const options = await payload.find({
-            collection: 'settings',
-            limit: totalopts.totalDocs
-        })
+        const options = await getSettings(payload)
         
         //return options
         for (const group of groups.docs) {
             const hostsWithSameGroup = hosts.docs.filter((host: any) => host.room.id === group.id);
-            console.log(hostsWithSameGroup.length)
+           // console.log(hostsWithSameGroup.length)
             const hostsForDhcp = [];
             if (hostsWithSameGroup.length) {
                 let gwIp = group.gateway.ipAddress;
@@ -40,11 +34,9 @@ export class Exporter {
                     gwIp = ""
                 }
                 if (group.isEnabled) {
-                    console.log("Building hosts for " + group.name)
+                  //  console.log("Building hosts for " + group.name)
                     hostsWithSameGroup.forEach((host: any) => {
-                        if (host.isEnabled) {
-                            hostsForDhcp.push(this.getHost(host.name, host.macAddress, host.ipAddress));
-                        }
+                            hostsForDhcp.push(this.getHost(host.name, host.macAddress, host.ipAddress, host.isEnabled));
                     });
                 }
                 var group_dns = ""
@@ -55,20 +47,20 @@ export class Exporter {
                 group_dns, 
                 hostsForDhcp.join(EOLx2), 
                 group.name,    
-                options.docs[2].value,
-                options.docs[3].value, ));
+                options.PXE_FILENAME,
+                options.PXE_ADDRESS, ));
             }
         }
         //return groupsArr
         return Exporter.getConfig(groupsArr.join(EOLx2), 
-        options.docs[4].value, //dns
-        options.docs[5].value, //gw
-        options.docs[6].value, //netmask
-        options.docs[7].value, //subnet
-        options.docs[2].value, //pxe filename
-        options.docs[3].value, // pxe ip
-        options.docs[1].value, //range begin
-        options.docs[0].value, // range end
+        options.DNS_SERVER, //dns
+        options.DHCP_DEFAULT_GW, //gw
+        options.DHCP_NET_MASK, //netmask
+        options.DHCP_SUBNET, //subnet
+        options.PXE_FILENAME, //pxe filename
+        options.PXE_ADDRESS, // pxe ip
+        options.DHCP_IP_RANGE_BEGIN, //range begin
+        options.DHCP_IP_RANGE_END, // range end
     );
     }
 
@@ -91,15 +83,13 @@ export class Exporter {
             collection: 'hosts',
             limit: totalhosts.totalDocs
         })
-        const options = await payload.find({
-            collection: 'settings',
-            limit: totalopts.totalDocs
-        })
+        let options = await getSettings(payload);
+        console.log(options)
         var wb = XLSX.utils.book_new();
         //return options
         for (const group of groups.docs) {
             const hostsWithSameGroup = hosts.docs.filter((host: any) => host.room.id === group.id);
-            console.log(hostsWithSameGroup.length)
+            //console.log(hostsWithSameGroup.length)
             if (hostsWithSameGroup.length) {
                 var aoa_ws = []
                 var isEnabled = "no"
@@ -108,7 +98,7 @@ export class Exporter {
                 } else {
                     isEnabled = "no"
                 }
-                console.log("Building hosts for " + group.name)
+               // console.log("Building hosts for " + group.name)
                 hostsWithSameGroup.forEach((host: any) => {
                     if (host.isEnabled && group.isEnabled) {
                         isEnabled = "yes"
@@ -208,11 +198,110 @@ ${hosts}
         return res.join(EOL);
     }
 
-    private static getHost(name: string, mac: string, ip: string): string {
-        return `          host ${name} {
+    private static getHost(name: string, mac: string, ip: string, isEnabled: boolean): string {
+        if(isEnabled){
+            return `          host ${name} {
                 hardware ethernet ${mac};
                 fixed-address ${ip};
               }
               `;
+        } else {
+            return ` #         host ${name} {
+            #    hardware ethernet ${mac}; DISABLED HOST
+            #    fixed-address ${ip};
+           #   }
+              `;
+        }
     }
+}
+
+async function getSettings(payload: any){
+    let settings = {
+        DHCP_IP_RANGE_BEGIN: "1",
+        DHCP_IP_RANGE_END: "1",
+        DNS_SERVER: "1" ,
+        PXE_FILENAME: "1",
+        PXE_ADDRESS: "1",
+        DHCP_DEFAULT_GW: "1",
+        DHCP_NET_MASK: "1",
+        DHCP_SUBNET: "1"
+
+    }
+    const totalopts= await payload.count({
+        collection: 'settings'
+    })
+    settings.DHCP_IP_RANGE_BEGIN = (await payload.find({
+        collection: 'settings',
+        limit: totalopts.totalDocs,
+        where: {
+            key: {
+                equals: "DHCP_IP_RANGE_BEGIN"
+            }
+        }
+    })).docs[0].value
+    settings.DHCP_IP_RANGE_END = (await payload.find({
+        collection: 'settings',
+        limit: totalopts.totalDocs,
+        where: {
+            key: {
+                equals: "DHCP_IP_RANGE_END"
+            }
+        }
+    })).docs[0].value
+
+    settings.DNS_SERVER = (await payload.find({
+        collection: 'settings',
+        limit: totalopts.totalDocs,
+        where: {
+            key: {
+                equals: "DHCP_NET_DNS"
+            }
+        }
+    })).docs[0].value
+    settings.PXE_FILENAME = (await payload.find({
+        collection: 'settings',
+        limit: totalopts.totalDocs,
+        where: {
+            key: {
+                equals: "DHCP_NET_PXEFILE"
+            }
+        }
+    })).docs[0].value
+    settings.PXE_ADDRESS = (await payload.find({
+        collection: 'settings',
+        limit: totalopts.totalDocs,
+        where: {
+            key: {
+                equals: "DHCP_NET_PXEADDR"
+            }
+        }
+    })).docs[0].value
+    settings.DHCP_DEFAULT_GW = (await payload.find({
+        collection: 'settings',
+        limit: totalopts.totalDocs,
+        where: {
+            key: {
+                equals: "DHCP_NET_GW"
+            }
+        }
+    })).docs[0].value
+    settings.DHCP_NET_MASK = (await payload.find({
+        collection: 'settings',
+        limit: totalopts.totalDocs,
+        where: {
+            key: {
+                equals: "DHCP_NET_MASK"
+            }
+        }
+    })).docs[0].value
+    settings.DHCP_SUBNET = (await payload.find({
+        collection: 'settings',
+        limit: totalopts.totalDocs,
+        where: {
+            key: {
+                equals: "DHCP_NET_SUBNET"
+            }
+        }
+    })).docs[0].value
+    return settings
 }

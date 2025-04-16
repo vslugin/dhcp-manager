@@ -1,4 +1,5 @@
 import {CollectionConfig} from "payload/types";
+import { beforeDelete } from "./hooks";
 
 
 export const Rooms: CollectionConfig = {
@@ -15,6 +16,9 @@ export const Rooms: CollectionConfig = {
     },
     admin: {
         useAsTitle: 'name',
+    },
+    hooks: {
+        beforeDelete: [beforeDelete]
     },
     fields: [
         {

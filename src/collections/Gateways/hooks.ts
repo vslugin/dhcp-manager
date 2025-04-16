@@ -8,10 +8,14 @@ export const checkGWName: FieldHook = async ({ value, collection, req}) => {
 }
 
 export const checkGWDesc: FieldHook = async({value,collection, req})  => {
+    if(value == "") {
+        return ""
+    } else {
     const regEx = /^[а-яА-Яa-zA-Z0-9\s_-]+$/
     if(!regEx.test(value)) {
         throw new Error('В описании допустимы только буквы, цифры пробелы и дефисы!')
     }
+}
 }
 
 export const checkGWIP: FieldHook = async({value,collection, req})  => {

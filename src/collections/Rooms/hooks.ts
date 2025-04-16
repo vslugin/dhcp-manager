@@ -16,9 +16,13 @@ const isValidDesc = (input) => {
 }
 
 export const checkRoomDesc: FieldHook = async ({value, req, originalDoc}) => {
+    if(value == "") {
+        return ""
+    } else {
     if(!isValidDesc(value)){
         throw new Error("В описании допустимы только буквы, цифры пробелы и дефисы!")
     }
+}
 }
 
 export const checkRoomName: FieldHook = async ({value, req, originalDoc}) => {

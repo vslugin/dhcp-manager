@@ -1,6 +1,7 @@
 import { CollectionConfig } from 'payload/types'
 import { exportHandler } from './handlers/export'
 import { dhcpConfigHandler } from './handlers/dhcpConfig'
+import { EmailCheck } from './hooks'
 
 export const Users: CollectionConfig = {
   slug: 'users',
@@ -17,6 +18,9 @@ export const Users: CollectionConfig = {
   auth: true,
   admin: {
     useAsTitle: 'email',
+  },
+  hooks: {
+    beforeValidate: [EmailCheck]
   },
   fields: [
     // Email added by default

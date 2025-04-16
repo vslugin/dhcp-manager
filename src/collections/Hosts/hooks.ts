@@ -5,6 +5,17 @@ const isValidHostName = (input) => {
     return regEx.test(input);
 };
 
+const isValidDesc = (input) => {
+    const regEx = /^[а-яА-Яa-zA-Z0-9\s_-]+$/
+    return regEx.test(input)
+}
+
+export const checkHostDesc: FieldHook = async ({value, req, originalDoc}) => {
+    if(!isValidDesc(value)){
+        throw new Error("В описании допустимы только буквы, цифры пробелы и дефисы!")
+    }
+}
+
 export const checkHostName: FieldHook = async ({ value, req, originalDoc }) => {
 
     if (!isValidHostName(value)) {
@@ -66,7 +77,7 @@ export const checkMacAddress: FieldHook = async ({ value, req, originalDoc }) =>
     const isEditing = originalDoc;
     const isDuplicating = req.body?.id;
     value = value.toUpperCase()
-    if(!(isEditing || isDuplicating)) {
+    if(!isDuplicating) {
         if (!isValidMacAddress(value)) {
             throw new Error('Введите корректный MAC-адрес в формате XX:XX:XX:XX:XX:XX, где X принимает шестрадцатиричное значение от 1 до F');
         }
@@ -123,7 +134,8 @@ export const checkIpAddress: FieldHook = async ({ value, req, originalDoc }) => 
     const isEditing = originalDoc;
     const isDuplicating = req.body?.id;
 
-    if(!(isEditing || isDuplicating)){
+
+    if(!isDuplicating){
         if (!isValidIpAddress(value)) {
             throw new Error('Введённое значение не похоже на IP-адрес');
         }

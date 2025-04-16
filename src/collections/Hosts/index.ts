@@ -1,5 +1,5 @@
 import {CollectionConfig} from "payload/types";
-import {checkHostName, checkIpAddress, checkMacAddress} from "./hooks";
+import {checkHostDesc, checkHostName, checkIpAddress, checkMacAddress} from "./hooks";
 
 export const Hosts: CollectionConfig = {
     slug: "hosts",
@@ -35,7 +35,10 @@ export const Hosts: CollectionConfig = {
                 ru: 'Описание'
             },
             name: "description",
-            type: "textarea"
+            type: "textarea",
+            hooks: {
+                beforeValidate: [checkHostDesc]
+            }
         },
         {
             label: {

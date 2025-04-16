@@ -65,13 +65,13 @@ export const checkMacAddress: FieldHook = async ({ value, req, originalDoc }) =>
 
     const isEditing = originalDoc;
     const isDuplicating = req.body?.id;
-
+    value = value.toUpperCase()
     if(!(isEditing || isDuplicating)) {
         if (!isValidMacAddress(value)) {
             throw new Error('Введите корректный MAC-адрес в формате XX:XX:XX:XX:XX:XX, где X принимает шестрадцатиричное значение от 1 до F');
         }
     }
-
+    
     if(isDuplicating) {
 
         const dflValue = '00:00:00:00:00:00';

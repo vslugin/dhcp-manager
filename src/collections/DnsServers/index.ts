@@ -1,4 +1,5 @@
 import {CollectionConfig} from "payload/types";
+import { checkDNSDesc, checkDNSIP, checkDNSName } from "./hooks";
 
 
 export const DnsServers: CollectionConfig = {
@@ -24,7 +25,10 @@ export const DnsServers: CollectionConfig = {
             },
             name: "name",
             type: "text",
-            required: true
+            required: true,
+            hooks: {
+                beforeChange: [checkDNSName]
+        }
         },
         {
             label: {
@@ -32,7 +36,10 @@ export const DnsServers: CollectionConfig = {
                 ru: 'Описание'
             },
             name: "description",
-            type: "textarea"
+            type: "textarea", 
+            hooks: {
+             beforeChange: [checkDNSDesc]
+            }
         },
         {
             label: {
@@ -41,7 +48,10 @@ export const DnsServers: CollectionConfig = {
             },
             name: "ipAddress",
             type: "text",
-            required: true
+            required: true,
+            hooks: {
+                    beforeChange: [checkDNSIP]
+            }
         },
         {
             label: {

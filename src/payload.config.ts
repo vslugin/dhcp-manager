@@ -9,10 +9,14 @@ import {Gateways} from "./collections/Gateways";
 import {Hosts} from "./collections/Hosts";
 import {Settings} from "./collections/Settings";
 import {DnsServers} from "./collections/DnsServers";
+import MyCustomAction, { ExportDHCPConfig } from './components/exportXLSX'
 
 export default buildConfig({
     debug: true,
     admin: {
+        components: {
+            actions: [MyCustomAction, ExportDHCPConfig]
+        },
         disable: false,
         user: Users.slug,
         bundler: webpackBundler(),

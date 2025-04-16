@@ -15,7 +15,7 @@ export const Rooms: CollectionConfig = {
         },
     },
     admin: {
-        useAsTitle: 'name',
+        useAsTitle: 'name'
     },
     hooks: {
         beforeDelete: [beforeDelete]

@@ -68,9 +68,6 @@ export class Exporter {
         const totalrooms = await payload.count({
             collection: 'rooms'
         })
-        const totalopts= await payload.count({
-            collection: 'settings'
-        })
         const totalhosts = await payload.count({
             collection: 'hosts'
         })

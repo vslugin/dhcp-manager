@@ -1,4 +1,5 @@
 import {CollectionConfig} from "payload/types";
+import { beforeSettingsValidate } from "./hooks";
 
 export const Settings: CollectionConfig = {
     slug: "settings",
@@ -14,6 +15,9 @@ export const Settings: CollectionConfig = {
     },
     admin: {
         useAsTitle: 'name',
+    },
+    hooks: {
+        beforeValidate: [beforeSettingsValidate]
     },
     access: {
         create: () => false,

@@ -79,7 +79,12 @@ export const checkMacAddress: FieldHook = async ({ value, req, originalDoc }) =>
     value = value.toUpperCase()
     if(!isDuplicating) {
         if (!isValidMacAddress(value)) {
-            throw new Error('Введите корректный MAC-адрес в формате XX:XX:XX:XX:XX:XX, где X принимает шестрадцатиричное значение от 1 до F');
+            var regEx = /^([0-9A-Fa-f]{2}-){5}[0-9A-Fa-f]{2}$/
+            if(regEx.test(value)) {
+                value = value.replaceAll("-", ":")
+            } else {
+                throw new Error('Введите корректный MAC-адрес в формате XX:XX:XX:XX:XX:XX, где X принимает шестрадцатиричное значение от 1 до F');
+            }
         }
     }
     

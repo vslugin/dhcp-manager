@@ -1,4 +1,5 @@
 import { BeforeValidateHook } from "payload/dist/globals/config/types";
+import { CollectionBeforeValidateHook } from "payload/types";
 
 var ipRegex = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
 
@@ -6,7 +7,7 @@ var netmaskRegEx = /^[1][6-9]$|^[2][0-4]$/
 
 var pxeFileNameRegEx = /^[а-яА-Яa-zA-Z0-9\s._-]+$/
 
-export const beforeSettingsValidate: BeforeValidateHook = async ({data}) => {
+export const beforeSettingsValidate: CollectionBeforeValidateHook = async ({data}) => {
     switch(data.key){
         case "DHCP_IP_RANGE_END":
             if(!ipRegex.test(data.value)) throw new Error("Введённое значение не похоже на IP-адрес")

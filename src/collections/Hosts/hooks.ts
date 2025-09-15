@@ -11,7 +11,7 @@ const isValidDesc = (input) => {
 }
 
 export const checkHostDesc: FieldHook = async ({value, req, originalDoc}) => {
-    if(!isValidDesc(value)){
+    if(value != "" && !isValidDesc(value)){
         throw new Error("В описании допустимы только буквы, цифры пробелы и дефисы!")
     }
 }

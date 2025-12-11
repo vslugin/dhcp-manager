@@ -40,9 +40,9 @@ export const Rooms: CollectionConfig = {
             },
             name: "description",
             type: "textarea",
-            hooks: {
-                beforeValidate: [checkRoomDesc]
-            }
+            // hooks: {
+            //     beforeValidate: [checkRoomDesc]
+            // }
         },
         {
             label: {

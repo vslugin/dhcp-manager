@@ -36,9 +36,9 @@ export const Hosts: CollectionConfig = {
             },
             name: "description",
             type: "textarea",
-            hooks: {
-                beforeValidate: [checkHostDesc]
-            }
+            // hooks: {
+            //     beforeValidate: [checkHostDesc]
+            // }
         },
         {
             label: {

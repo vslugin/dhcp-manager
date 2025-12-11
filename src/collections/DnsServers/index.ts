@@ -37,9 +37,9 @@ export const DnsServers: CollectionConfig = {
             },
             name: "description",
             type: "textarea", 
-            hooks: {
-             beforeChange: [checkDNSDesc]
-            }
+            // hooks: {
+            //  beforeChange: [checkDNSDesc]
+            // }
         },
         {
             label: {

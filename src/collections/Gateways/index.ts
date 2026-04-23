@@ -1,5 +1,5 @@
 import {CollectionConfig} from "payload/types";
-import { checkGWDesc, checkGWIP, checkGWName } from "./hooks";
+import { checkGWIP, checkGWName } from "./hooks";
 
 
 export const Gateways: CollectionConfig = {
@@ -36,10 +36,7 @@ export const Gateways: CollectionConfig = {
                 ru: 'Описание'
             },
             name: "description",
-            type: "textarea",
-            hooks: {
-                beforeValidate: [checkGWDesc]
-            }
+            type: "textarea"
         },
         {
             label: {

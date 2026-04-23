@@ -1,5 +1,5 @@
 import {CollectionConfig} from "payload/types";
-import { beforeDelete, checkRoomDesc, checkRoomName, checkRoomOwner } from "./hooks";
+import { beforeDelete, checkRoomName, checkRoomOwner } from "./hooks";
 
 
 export const Rooms: CollectionConfig = {
@@ -39,10 +39,7 @@ export const Rooms: CollectionConfig = {
                 ru: 'Описание'
             },
             name: "description",
-            type: "textarea",
-            // hooks: {
-            //     beforeValidate: [checkRoomDesc]
-            // }
+            type: "textarea"
         },
         {
             label: {

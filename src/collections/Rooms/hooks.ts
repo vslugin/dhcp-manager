@@ -10,21 +10,6 @@ const isValidRoomOwner = (input) => {
     return regEx.test(input);
 };
 
-const isValidDesc = (input) => {
-    const regEx = /^[а-яА-Яa-zA-Z0-9\s_-]+$/
-    return regEx.test(input)
-}
-
-export const checkRoomDesc: FieldHook = async ({value, req, originalDoc}) => {
-    if(value == "") {
-        return ""
-    } else {
-    if(!isValidDesc(value)){
-        throw new Error("В описании допустимы только буквы, цифры пробелы и дефисы!")
-    }
-}
-}
-
 export const checkRoomName: FieldHook = async ({value, req, originalDoc}) => {
     if(!isValidRoomName(value)){
         throw new Error('В имени допустимы только буквы (a-z) в нижнем регистре цифры и знак "_". Допустимая длина от 2 до 20 символов')

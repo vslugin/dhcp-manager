@@ -5,17 +5,6 @@ const isValidHostName = (input) => {
     return regEx.test(input);
 };
 
-const isValidDesc = (input) => {
-    const regEx = /^[а-яА-Яa-zA-Z0-9\s_-]+$/
-    return regEx.test(input)
-}
-
-export const checkHostDesc: FieldHook = async ({value, req, originalDoc}) => {
-    if(value != "" && !isValidDesc(value)){
-        throw new Error("В описании допустимы только буквы, цифры пробелы и дефисы!")
-    }
-}
-
 export const checkHostName: FieldHook = async ({ value, req, originalDoc }) => {
 
     if (!isValidHostName(value)) {
